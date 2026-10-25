@@ -68,6 +68,31 @@ function makeCutout(createCanvas, image, maskCanvas, width, height, o) {
   return c;
 }
 
+// Interletrado del titular: -10 milésimas de em, como el tracking de Illustrator.
+const TITLE_TRACKING = -10 / 1000;
+
+// Si el navegador no admite letterSpacing en canvas, se espacia letra a letra.
+function lineWidth(ctx, line, spacing) {
+  if ('letterSpacing' in ctx) return ctx.measureText(line).width;
+  const chars = [...line];
+  return chars.reduce((w, ch) => w + ctx.measureText(ch).width, 0) + spacing * (chars.length - 1);
+}
+
+function drawLine(ctx, line, cx, y, spacing) {
+  if ('letterSpacing' in ctx) { ctx.fillText(line, cx, y); return; }
+  ctx.textAlign = 'left';
+  let x = cx - lineWidth(ctx, line, spacing) / 2;
+  for (const ch of line) { ctx.fillText(ch, x, y); x += ctx.measureText(ch).width + spacing; }
+  ctx.textAlign = 'center';
+}
+
+function setTitleFont(ctx, o, px) {
+  ctx.font = `${o.titleWeight} ${px}px "${o.titleFont}"`;
+  const spacing = px * TITLE_TRACKING;
+  if ('letterSpacing' in ctx) ctx.letterSpacing = `${spacing}px`;
+  return spacing;
+}
+
 function drawTitle(ctx, width, height, o) {
   let text = (o.title || '').trim();
   if (!text) return;
@@ -76,12 +101,12 @@ function drawTitle(ctx, width, height, o) {
   ctx.save();
   // El tamaño elegido es el máximo: si la línea más larga no cabe, se reduce para que nunca se corte.
   let px = Math.round(width * o.titleSize);
-  ctx.font = `${o.titleWeight} ${px}px "${o.titleFont}"`;
-  const widest = Math.max(...lines.map((l) => ctx.measureText(l).width));
+  let spacing = setTitleFont(ctx, o, px);
+  const widest = Math.max(...lines.map((l) => lineWidth(ctx, l, spacing)));
   const maxW = width * 0.92;
   if (widest > maxW) {
     px = Math.floor(px * maxW / widest);
-    ctx.font = `${o.titleWeight} ${px}px "${o.titleFont}"`;
+    spacing = setTitleFont(ctx, o, px);
   }
   const step = px * o.titleLeading;
   ctx.fillStyle = o.titleColor;
@@ -92,7 +117,7 @@ function drawTitle(ctx, width, height, o) {
   const blockH = capH + step * (lines.length - 1);
   let base = height * o.titleY - blockH / 2 + capH;
   for (const l of lines) {
-    ctx.fillText(l, width / 2, base);
+    drawLine(ctx, l, width / 2, base, spacing);
     base += step;
   }
   ctx.restore();
