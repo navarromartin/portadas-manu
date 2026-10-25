@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portadas · Manu</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Portadas</h1>
+    <p class="lead">Sube una foto, escribe el titular y descarga la portada del reel en 1080×1920. Todo se hace en tu navegador, las fotos no se suben a ningún sitio.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept="image/*" multiple hidden>
+        <span class="drop-title">Arrastra fotos aquí o haz clic para elegirlas</span>
+        <span class="drop-hint">Mejor en vertical. Puedes subir varias a la vez.</span>
+      </label>
+
+      <div class="thumbs" id="thumbs" hidden></div>
+
+      <fieldset class="group">
+        <legend>Titular · Big Shoulders</legend>
+        <div class="field">
+          <label for="title">Texto <span class="hint">Intro para cambiar de línea</span></label>
+          <textarea id="title" rows="2" placeholder="MEJORA&#10;TU SWING"></textarea>
+        </div>
+        <div class="field range"><label for="titleY">Posición vertical</label><input type="range" id="titleY" min="0.08" max="0.92" step="0.005"></div>
+        <div class="field range"><label for="titleSize">Tamaño</label><input type="range" id="titleSize" min="0.1" max="0.6" step="0.005"></div>
+        <div class="field range"><label for="titleLeading">Interlineado</label><input type="range" id="titleLeading" min="0.7" max="1.2" step="0.01"></div>
+        <div class="field row">
+          <label class="check"><input type="checkbox" id="uppercase"> Mayúsculas</label>
+          <label class="check"><input type="checkbox" id="cutout"> Detrás de la persona</label>
+        </div>
+        <div class="field row">
+          <label for="titleWeight" class="inline">Grosor
+            <select id="titleWeight"><option value="900">Black</option><option value="800">ExtraBold</option></select>
+          </label>
+          <div class="swatches" data-target="titleColor"></div>
+          <input type="color" id="titleColor" aria-label="Color del titular" hidden>
+        </div>
+      </fieldset>
+
+      <fieldset class="group">
+        <legend>Texto extra · Rethink Sans</legend>
+        <div class="field">
+          <label for="extra">Texto <span class="hint">Opcional</span></label>
+          <textarea id="extra" rows="2" placeholder="Tres ejercicios para ganar rotación"></textarea>
+        </div>
+        <div class="field range"><label for="extraY">Posición vertical</label><input type="range" id="extraY" min="0.05" max="0.95" step="0.005"></div>
+        <div class="field range"><label for="extraSize">Tamaño</label><input type="range" id="extraSize" min="0.025" max="0.1" step="0.0025"></div>
+        <div class="field row">
+          <label for="extraWeight" class="inline">Grosor
+            <select id="extraWeight"><option value="400">Regular</option><option value="600">SemiBold</option><option value="700">Bold</option></select>
+          </label>
+          <div class="swatches" data-target="extraColor"></div>
+          <input type="color" id="extraColor" aria-label="Color del texto extra" hidden>
+        </div>
+      </fieldset>
+
+      <fieldset class="group">
+        <legend>Foto</legend>
+        <div class="field range"><label for="zoom">Zoom</label><input type="range" id="zoom" min="1" max="2.5" step="0.01"></div>
+        <div class="field range"><label for="panX">Encuadre horizontal</label><input type="range" id="panX" min="0" max="1" step="0.005"></div>
+        <div class="field range"><label for="panY">Encuadre vertical</label><input type="range" id="panY" min="0" max="1" step="0.005"></div>
+        <div class="field range"><label for="darken">Oscurecer el fondo</label><input type="range" id="darken" min="0" max="0.6" step="0.01"></div>
+        <label class="check"><input type="checkbox" id="grid" checked> Ver el recorte de la cuadrícula del perfil</label>
+      </fieldset>
+
+      <div class="actions">
+        <select id="format" aria-label="Formato">
+          <option value="image/jpeg">JPG</option>
+          <option value="image/png">PNG</option>
+        </select>
+        <button class="btn" id="download" disabled>Descargar</button>
+        <button class="btn ghost" id="downloadAll" disabled hidden>Descargar todas</button>
+      </div>
+
+      <p class="status" id="status"></p>
+    </section>
+
+    <section class="preview-wrap">
+      <div class="stage" id="stage">
+        <canvas id="preview" class="preview" width="540" height="960"></canvas>
+        <div class="grid-guide" id="gridGuide" hidden></div>
+      </div>
+      <p class="empty" id="empty">La vista previa aparecerá aquí.</p>
+    </section>
+  </main>
+
+  <script src="compose.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
