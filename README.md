@@ -27,3 +27,5 @@ Alternativa: doble clic en `Abrir portadas.command`, que arranca un servidor loc
 - `app.js`: carga de fotos, recorte, controles y descarga.
 - `compose.js`: composición (foto encuadrada, titular, persona recortada, texto extra). Expone `PortadaCompose`.
 - `fonts/`: Antonio, Big Shoulders Display y Rethink Sans (licencia SIL Open Font License, uso comercial libre).
+
+Al cambiar `style.css`, `compose.js` o `app.js`, sube el número `?v=` en `index.html` para que los navegadores no sigan usando la versión guardada en caché.
