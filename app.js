@@ -21,11 +21,17 @@ const BRAND = [
   { name: 'Blanco', hex: '#FFFFFF' },
 ];
 
+// Grosores disponibles de cada tipografía del titular.
+const TITLE_WEIGHTS = {
+  'Antonio': [{ name: 'Bold', value: 700 }, { name: 'SemiBold', value: 600 }],
+  'Big Shoulders Display': [{ name: 'Black', value: 900 }, { name: 'ExtraBold', value: 800 }],
+};
+
 const $ = (id) => document.getElementById(id);
 const createCanvas = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
 
 const optionKeys = [
-  'title', 'titleY', 'titleSize', 'titleLeading', 'titleWeight', 'titleColor', 'uppercase', 'cutout',
+  'title', 'titleY', 'titleSize', 'titleLeading', 'titleFont', 'titleWeight', 'titleColor', 'uppercase', 'cutout',
   'extra', 'extraY', 'extraSize', 'extraWeight', 'extraColor',
   'zoom', 'panX', 'panY', 'darken',
 ];
@@ -153,8 +159,14 @@ function select(item) {
   updateButtons();
 }
 
+// Rellena el selector de grosor con los de la tipografía elegida.
+function fillWeights(font) {
+  ui.titleWeight.replaceChildren(...TITLE_WEIGHTS[font].map((w) => new Option(w.name, w.value)));
+}
+
 function syncControls() {
   const o = current ? current.options : lastOptions;
+  fillWeights(o.titleFont);
   for (const k of optionKeys) {
     const el = ui[k];
     if (el.type === 'checkbox') el.checked = !!o[k]; else el.value = o[k];
@@ -241,6 +253,7 @@ async function download(item) {
 // ---------- eventos ----------
 for (const k of optionKeys) {
   ui[k].addEventListener('input', () => {
+    if (k === 'titleFont') fillWeights(ui.titleFont.value);
     const o = readControls();
     const shared = { ...o };
     for (const p of perPhoto) delete shared[p];
@@ -269,6 +282,8 @@ document.addEventListener('paste', (e) => {
   buildSwatches();
   syncControls();
   await Promise.all([
+    document.fonts.load('700 40px "Antonio"'),
+    document.fonts.load('600 40px "Antonio"'),
     document.fonts.load('900 40px "Big Shoulders Display"'),
     document.fonts.load('800 40px "Big Shoulders Display"'),
     document.fonts.load('400 20px "Rethink Sans"'),

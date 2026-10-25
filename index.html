@@ -24,7 +24,7 @@
       <div class="thumbs" id="thumbs" hidden></div>
 
       <fieldset class="group">
-        <legend>Titular · Big Shoulders</legend>
+        <legend>Titular</legend>
         <div class="field">
           <label for="title">Texto <span class="hint">Intro para cambiar de línea</span></label>
           <textarea id="title" rows="2" placeholder="MEJORA&#10;TU SWING"></textarea>
@@ -37,9 +37,15 @@
           <label class="check"><input type="checkbox" id="cutout"> Detrás de la persona</label>
         </div>
         <div class="field row">
-          <label for="titleWeight" class="inline">Grosor
-            <select id="titleWeight"><option value="900">Black</option><option value="800">ExtraBold</option></select>
+          <label for="titleFont" class="inline">Tipografía
+            <select id="titleFont"><option value="Antonio">Antonio</option><option value="Big Shoulders Display">Big Shoulders</option></select>
           </label>
+          <label for="titleWeight" class="inline">Grosor
+            <select id="titleWeight"></select>
+          </label>
+        </div>
+        <div class="field row">
+          <span class="inline">Color</span>
           <div class="swatches" data-target="titleColor"></div>
           <input type="color" id="titleColor" aria-label="Color del titular" hidden>
         </div>

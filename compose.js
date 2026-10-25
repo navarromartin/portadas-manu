@@ -1,4 +1,4 @@
-// Composición de portadas 9:16: foto encuadrada, titular (Big Shoulders) detrás
+// Composición de portadas 9:16: foto encuadrada, titular (Antonio o Big Shoulders) detrás
 // de la persona y texto extra (Rethink Sans) por delante.
 // Funciona en navegador (script clásico, expone PortadaCompose) y en Node (require).
 
@@ -11,7 +11,8 @@ const defaults = {
   titleY: 0.3,         // centro del titular, fracción de la altura
   titleSize: 0.3,      // fracción del ancho
   titleLeading: 0.86,  // interlineado del titular
-  titleWeight: 900,
+  titleFont: 'Antonio',
+  titleWeight: 700,
   titleColor: '#FFFFFF',
   uppercase: true,
   extra: 'Tres ejercicios para ganar rotación',
@@ -75,19 +76,19 @@ function drawTitle(ctx, width, height, o) {
   ctx.save();
   // El tamaño elegido es el máximo: si la línea más larga no cabe, se reduce para que nunca se corte.
   let px = Math.round(width * o.titleSize);
-  ctx.font = `${o.titleWeight} ${px}px "Big Shoulders Display"`;
+  ctx.font = `${o.titleWeight} ${px}px "${o.titleFont}"`;
   const widest = Math.max(...lines.map((l) => ctx.measureText(l).width));
   const maxW = width * 0.92;
   if (widest > maxW) {
     px = Math.floor(px * maxW / widest);
-    ctx.font = `${o.titleWeight} ${px}px "Big Shoulders Display"`;
+    ctx.font = `${o.titleWeight} ${px}px "${o.titleFont}"`;
   }
   const step = px * o.titleLeading;
   ctx.fillStyle = o.titleColor;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
   // Centra el bloque usando la altura de mayúsculas para que no quede descolgado.
-  const capH = px * 0.72;
+  const capH = ctx.measureText('H').actualBoundingBoxAscent || px * 0.72;
   const blockH = capH + step * (lines.length - 1);
   let base = height * o.titleY - blockH / 2 + capH;
   for (const l of lines) {
