@@ -29,12 +29,16 @@
       <fieldset class="group">
         <legend>Titular</legend>
         <div class="field">
-          <label for="title">Texto <span class="hint">Intro para cambiar de línea</span></label>
+          <label for="small">Línea pequeña <span class="hint">opcional, va encima</span></label>
+          <input type="text" id="small" placeholder="Cómo ganar">
+        </div>
+        <div class="field">
+          <label for="title">Línea grande <span class="hint">Intro para cambiar de línea</span></label>
           <textarea id="title" rows="2" placeholder="MEJORA&#10;TU SWING"></textarea>
         </div>
         <div class="field range"><label for="titleY">Posición vertical</label><input type="range" id="titleY" min="0.08" max="0.92" step="0.005"></div>
-        <div class="field range"><label for="titleSize">Tamaño</label><input type="range" id="titleSize" min="0.1" max="0.6" step="0.005"></div>
-        <div class="field range"><label for="firstScale">Primera línea <span class="hint">más pequeña que el resto</span></label><input type="range" id="firstScale" min="0.3" max="1" step="0.01"></div>
+        <div class="field range"><label for="titleSize">Tamaño del texto grande</label><input type="range" id="titleSize" min="0.1" max="0.6" step="0.005"></div>
+        <div class="field range"><label for="smallSize">Tamaño del texto pequeño</label><input type="range" id="smallSize" min="0.03" max="0.2" step="0.0025"></div>
         <div class="field range"><label for="titleLeading">Interlineado</label><input type="range" id="titleLeading" min="0.7" max="1.2" step="0.01"></div>
         <div class="field row">
           <label class="check"><input type="checkbox" id="uppercase"> Mayúsculas</label>

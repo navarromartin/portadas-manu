@@ -2,6 +2,7 @@
 
 Hacedor de portadas de reels (1080×1920): sube una foto, escribe el titular y descarga la portada con el texto detrás de la persona.
 
+- Línea pequeña opcional encima del titular, con su propio tamaño (como en Voltereta).
 - Titular detrás de la persona, en **Anek Latin** (Bold 700 o SemiBold 600) o **Big Shoulders Display** (Black o ExtraBold), con interletrado -10.
 - Texto extra opcional en **Rethink Sans**, por delante.
 - Color del texto a un clic: verde claro `#6FBF84`, verde oscuro `#142116` o blanco `#FFFFFF`.

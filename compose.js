@@ -11,7 +11,8 @@ const defaults = {
   titleY: 0.3,         // centro del titular, fracción de la altura
   titleSize: 0.3,      // fracción del ancho
   titleLeading: 0.86,  // interlineado del titular
-  firstScale: 1,       // tamaño de la primera línea respecto a las demás (1 = igual)
+  small: '',           // línea pequeña opcional encima del titular (como en Voltereta)
+  smallSize: 0.08,     // fracción del ancho
   titleFont: 'Anek Latin',
   titleWeight: 700,
   titleColor: '#FFFFFF',
@@ -94,39 +95,49 @@ function setTitleFont(ctx, o, px) {
   return spacing;
 }
 
+// Ajusta el tamaño para que ninguna línea supere el ancho útil.
+function fitSize(ctx, o, lines, px, maxW) {
+  const sp = setTitleFont(ctx, o, px);
+  const widest = Math.max(...lines.map((l) => lineWidth(ctx, l, sp)));
+  return widest > maxW ? Math.floor(px * maxW / widest) : px;
+}
+
 function drawTitle(ctx, width, height, o) {
-  let text = (o.title || '').trim();
-  if (!text) return;
-  if (o.uppercase) text = text.toLocaleUpperCase('es-ES');
-  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
-  // Escala de cada línea: la primera puede ir más pequeña que el resto.
-  const scales = lines.map((_, i) => (i === 0 && lines.length > 1 ? o.firstScale : 1));
+  const prep = (t) => {
+    t = (t || '').trim();
+    if (o.uppercase) t = t.toLocaleUpperCase('es-ES');
+    return t.split('\n').map((l) => l.trim()).filter(Boolean);
+  };
+  const lines = prep(o.title);
+  const small = prep(o.small).join(' ');
+  if (!lines.length && !small) return;
   ctx.save();
-  // El tamaño elegido es el máximo: si alguna línea no cabe, se reduce todo para que nunca se corte.
-  let px = Math.round(width * o.titleSize);
   const maxW = width * 0.92;
-  let worst = 0;
-  lines.forEach((l, i) => {
-    const sp = setTitleFont(ctx, o, px * scales[i]);
-    worst = Math.max(worst, lineWidth(ctx, l, sp) / maxW);
-  });
-  if (worst > 1) px = Math.floor(px / worst);
+  // El tamaño elegido es el máximo: si una línea no cabe, se reduce para que nunca se corte.
+  const px = lines.length ? fitSize(ctx, o, lines, Math.round(width * o.titleSize), maxW) : 0;
+  const smallPx = small ? fitSize(ctx, o, [small], Math.round(width * o.smallSize), maxW) : 0;
   ctx.fillStyle = o.titleColor;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
   // Centra el bloque usando la altura de mayúsculas para que no quede descolgado.
-  setTitleFont(ctx, o, px);
-  const capRatio = (ctx.measureText('H').actualBoundingBoxAscent || px * 0.72) / px;
-  const sizes = scales.map((s) => px * s);
-  const capH = sizes[0] * capRatio;
-  let blockH = capH;
-  for (let i = 1; i < sizes.length; i++) blockH += sizes[i] * o.titleLeading;
-  let base = height * o.titleY - blockH / 2 + capH;
-  lines.forEach((l, i) => {
-    if (i > 0) base += sizes[i] * o.titleLeading;
-    const sp = setTitleFont(ctx, o, sizes[i]);
-    drawLine(ctx, l, width / 2, base, sp);
-  });
+  setTitleFont(ctx, o, 100);
+  const capRatio = (ctx.measureText('H').actualBoundingBoxAscent || 72) / 100;
+  const step = px * o.titleLeading;
+  const bigH = lines.length ? px * capRatio + step * (lines.length - 1) : 0;
+  // Separación entre la línea pequeña y el titular, proporcional a la pequeña.
+  const gap = small && lines.length ? smallPx * 0.45 : 0;
+  const blockH = (small ? smallPx * capRatio : 0) + gap + bigH;
+  let top = height * o.titleY - blockH / 2;
+  if (small) {
+    const sp = setTitleFont(ctx, o, smallPx);
+    drawLine(ctx, small, width / 2, top + smallPx * capRatio, sp);
+    top += smallPx * capRatio + gap;
+  }
+  if (lines.length) {
+    const sp = setTitleFont(ctx, o, px);
+    let base = top + px * capRatio;
+    for (const l of lines) { drawLine(ctx, l, width / 2, base, sp); base += step; }
+  }
   ctx.restore();
 }
 

@@ -100,7 +100,7 @@ h1 {
 .field.row { flex-direction: row; align-items: center; gap: 10px; flex-wrap: wrap; }
 .check, .inline { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
 
-textarea, select {
+textarea, select, input[type="text"] {
   font: inherit;
   color: var(--beige);
   background: var(--green);
@@ -110,7 +110,7 @@ textarea, select {
   outline: none;
 }
 textarea { resize: vertical; min-height: 56px; }
-textarea:focus, select:focus { border-color: var(--accent); }
+textarea:focus, select:focus, input[type="text"]:focus { border-color: var(--accent); }
 select { border-radius: 2rem; padding: 6px 12px; }
 
 input[type="range"] { accent-color: var(--accent); width: 100%; margin: 0; }
