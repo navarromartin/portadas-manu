@@ -26,6 +26,9 @@ const defaults = {
   panX: 0.5,
   panY: 0.5,
   darken: 0.15,
+  glow: 0.02,          // resplandor del titular, fracción del ancho (como en Voltereta)
+  glowOpacity: 0.8,
+  punch: 0.5,          // retoque de la foto: contraste, color, persona iluminada y viñeta (0–1)
   cutout: true,
 };
 
@@ -177,17 +180,51 @@ function drawExtra(ctx, width, height, o) {
 // image: canvas o imagen con la foto original. cutoutCanvas: persona encuadrada o null.
 function compose(createCanvas, { image, cutoutCanvas, width = WIDTH, height = HEIGHT, options }) {
   const o = { ...defaults, ...options };
+  const k = Math.max(0, Math.min(1, o.punch || 0));
   const c = createCanvas(width, height);
   const ctx = c.getContext('2d');
   ctx.fillStyle = '#142116';
   ctx.fillRect(0, 0, width, height);
-  if (image) drawFramed(ctx, image, image.width, image.height, width, height, o);
+  // Fondo con algo más de contraste y color.
+  if (image) {
+    ctx.save();
+    if (k > 0) ctx.filter = `contrast(${1 + 0.22 * k}) saturate(${1 + 0.18 * k}) brightness(${1 - 0.04 * k})`;
+    drawFramed(ctx, image, image.width, image.height, width, height, o);
+    ctx.restore();
+  }
   if (o.darken > 0) {
     ctx.fillStyle = `rgba(20,33,22,${o.darken})`;
     ctx.fillRect(0, 0, width, height);
   }
-  drawTitle(ctx, width, height, o);
-  if (o.cutout && cutoutCanvas) ctx.drawImage(cutoutCanvas, 0, 0, width, height);
+  // Viñeta: oscurece los bordes para llevar la mirada al centro.
+  if (k > 0) {
+    const g = ctx.createRadialGradient(width / 2, height * 0.42, width * 0.25, width / 2, height * 0.5, height * 0.75);
+    g.addColorStop(0, 'rgba(0,0,0,0)');
+    g.addColorStop(1, `rgba(0,0,0,${0.45 * k})`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, width, height);
+  }
+  // Titular en una capa aparte; el glow es esa capa desenfocada (como en Voltereta).
+  const layer = createCanvas(width, height);
+  drawTitle(layer.getContext('2d'), width, height, o);
+  const r = Math.max(0, width * (o.glow || 0));
+  if (r > 0 && o.glowOpacity > 0) {
+    for (const [radius, alpha] of [[r, o.glowOpacity], [r * 0.4, o.glowOpacity * 0.7]]) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.filter = `blur(${radius}px)`;
+      ctx.drawImage(layer, 0, 0);
+      ctx.restore();
+    }
+  }
+  ctx.drawImage(layer, 0, 0);
+  // Persona por delante, algo más iluminada y con más contraste que el fondo.
+  if (o.cutout && cutoutCanvas) {
+    ctx.save();
+    if (k > 0) ctx.filter = `brightness(${1 + 0.14 * k}) contrast(${1 + 0.16 * k}) saturate(${1 + 0.12 * k})`;
+    ctx.drawImage(cutoutCanvas, 0, 0, width, height);
+    ctx.restore();
+  }
   drawExtra(ctx, width, height, o);
   return c;
 }

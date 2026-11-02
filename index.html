@@ -8,7 +8,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <header class="top">
@@ -40,6 +40,7 @@
         <div class="field range"><label for="titleSize">Tamaño del texto grande</label><input type="range" id="titleSize" min="0.1" max="0.6" step="0.005"></div>
         <div class="field range"><label for="smallSize">Tamaño del texto pequeño</label><input type="range" id="smallSize" min="0.03" max="0.2" step="0.0025"></div>
         <div class="field range"><label for="titleLeading">Interlineado</label><input type="range" id="titleLeading" min="0.5" max="1.2" step="0.01"></div>
+        <div class="field range"><label for="glow">Glow</label><input type="range" id="glow" min="0" max="0.08" step="0.0025"></div>
         <div class="field row">
           <label class="check"><input type="checkbox" id="uppercase"> Mayúsculas</label>
           <label class="check"><input type="checkbox" id="cutout"> Detrás de la persona</label>
@@ -81,6 +82,7 @@
         <div class="field range"><label for="zoom">Zoom</label><input type="range" id="zoom" min="1" max="2.5" step="0.01"></div>
         <div class="field range"><label for="panX">Encuadre horizontal</label><input type="range" id="panX" min="0" max="1" step="0.005"></div>
         <div class="field range"><label for="panY">Encuadre vertical</label><input type="range" id="panY" min="0" max="1" step="0.005"></div>
+        <div class="field range"><label for="punch">Retoque de la foto</label><input type="range" id="punch" min="0" max="1" step="0.05"></div>
         <div class="field range"><label for="darken">Oscurecer el fondo</label><input type="range" id="darken" min="0" max="0.6" step="0.01"></div>
         <label class="check"><input type="checkbox" id="grid" checked> Ver el recorte de la cuadrícula del perfil</label>
       </fieldset>
@@ -106,7 +108,7 @@
     </section>
   </main>
 
-  <script src="compose.js?v=6"></script>
-  <script src="app.js?v=6"></script>
+  <script src="compose.js?v=7"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>

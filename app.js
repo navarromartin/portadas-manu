@@ -32,9 +32,9 @@ const createCanvas = (w, h) => { const c = document.createElement('canvas'); c.w
 const optionKeys = [
   'small', 'title', 'titleY', 'titleSize', 'smallSize', 'titleLeading', 'titleFont', 'titleWeight', 'titleColor', 'uppercase', 'cutout',
   'extra', 'extraY', 'extraSize', 'extraWeight', 'extraColor',
-  'zoom', 'panX', 'panY', 'darken',
+  'zoom', 'panX', 'panY', 'darken', 'glow', 'punch',
 ];
-const numeric = new Set(['titleY', 'titleSize', 'smallSize', 'titleLeading', 'titleWeight', 'extraY', 'extraSize', 'extraWeight', 'zoom', 'panX', 'panY', 'darken']);
+const numeric = new Set(['titleY', 'titleSize', 'smallSize', 'titleLeading', 'titleWeight', 'extraY', 'extraSize', 'extraWeight', 'zoom', 'panX', 'panY', 'darken', 'glow', 'punch']);
 // Al cambiar de foto se conservan los textos y estilos, pero el encuadre es propio de cada foto.
 const perPhoto = ['zoom', 'panX', 'panY'];
 
