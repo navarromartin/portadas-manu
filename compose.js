@@ -95,49 +95,47 @@ function setTitleFont(ctx, o, px) {
   return spacing;
 }
 
-// Ajusta el tamaño para que ninguna línea supere el ancho útil.
-function fitSize(ctx, o, lines, px, maxW) {
-  const sp = setTitleFont(ctx, o, px);
-  const widest = Math.max(...lines.map((l) => lineWidth(ctx, l, sp)));
-  return widest > maxW ? Math.floor(px * maxW / widest) : px;
-}
-
+// Titular como en Voltereta: línea pequeña encima y línea grande debajo, cada una
+// con su tamaño, sin reducir nada automáticamente (lo que marcas es lo que sale).
+// Se coloca según la tinta real de las letras, tildes incluidas, para que nada se pise.
 function drawTitle(ctx, width, height, o) {
   const prep = (t) => {
     t = (t || '').trim();
     if (o.uppercase) t = t.toLocaleUpperCase('es-ES');
     return t.split('\n').map((l) => l.trim()).filter(Boolean);
   };
-  const lines = prep(o.title);
-  const small = prep(o.small).join(' ');
-  if (!lines.length && !small) return;
+  const big = prep(o.title);
+  const small = prep(o.small);
+  if (!big.length && !small.length) return;
+  const bigPx = Math.round(width * o.titleSize);
+  const smallPx = Math.round(width * o.smallSize);
   ctx.save();
-  const maxW = width * 0.92;
-  // El tamaño elegido es el máximo: si una línea no cabe, se reduce para que nunca se corte.
-  const px = lines.length ? fitSize(ctx, o, lines, Math.round(width * o.titleSize), maxW) : 0;
-  const smallPx = small ? fitSize(ctx, o, [small], Math.round(width * o.smallSize), maxW) : 0;
-  ctx.fillStyle = o.titleColor;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
-  // Centra el bloque usando la altura de mayúsculas para que no quede descolgado.
-  setTitleFont(ctx, o, 100);
-  const capRatio = (ctx.measureText('H').actualBoundingBoxAscent || 72) / 100;
-  const step = px * o.titleLeading;
-  const bigH = lines.length ? px * capRatio + step * (lines.length - 1) : 0;
-  // Separación entre la línea pequeña y el titular: también la controla el interlineado
-  // (con 0,86 queda pegada como en Voltereta; más interlineado, más aire).
-  const gap = small && lines.length ? Math.max(smallPx * 0.25, smallPx * 0.45 + px * (o.titleLeading - 0.86)) : 0;
-  const blockH = (small ? smallPx * capRatio : 0) + gap + bigH;
-  let top = height * o.titleY - blockH / 2;
-  if (small) {
-    const sp = setTitleFont(ctx, o, smallPx);
-    drawLine(ctx, small, width / 2, top + smallPx * capRatio, sp);
-    top += smallPx * capRatio + gap;
-  }
-  if (lines.length) {
-    const sp = setTitleFont(ctx, o, px);
-    let base = top + px * capRatio;
-    for (const l of lines) { drawLine(ctx, l, width / 2, base, sp); base += step; }
+  // Medidas de cada bloque: alto de la tinta de la primera línea y de la última.
+  const block = (lines, px) => {
+    if (!lines.length) return null;
+    setTitleFont(ctx, o, px);
+    const first = ctx.measureText(lines[0]);
+    const last = ctx.measureText(lines[lines.length - 1]);
+    const step = px * o.titleLeading;   // el interlineado separa las líneas del bloque
+    const ascent = first.actualBoundingBoxAscent;
+    const descent = last.actualBoundingBoxDescent;
+    return { lines, px, step, ascent, height: ascent + step * (lines.length - 1) + descent };
+  };
+  const S = block(small, smallPx);
+  const B = block(big, bigPx);
+  // Separación fija entre la línea pequeña y la grande, como en Voltereta.
+  const gap = S && B ? Math.round(bigPx * 0.05) : 0;
+  const total = (S ? S.height : 0) + gap + (B ? B.height : 0);
+  let top = height * o.titleY - total / 2;
+  const cx = width / 2;
+  ctx.fillStyle = o.titleColor;
+  for (const blk of [S, B]) {
+    if (!blk) continue;
+    const sp = setTitleFont(ctx, o, blk.px);
+    blk.lines.forEach((l, i) => drawLine(ctx, l, cx, top + blk.ascent + blk.step * i, sp));
+    top += blk.height + gap;
   }
   ctx.restore();
 }
