@@ -1,4 +1,4 @@
-// Composición de portadas 9:16: foto encuadrada, titular (Antonio o Big Shoulders) detrás
+// Composición de portadas 9:16: foto encuadrada, titular (Antonio) detrás
 // de la persona y texto extra (Rethink Sans) por delante.
 // Funciona en navegador (script clásico, expone PortadaCompose) y en Node (require).
 

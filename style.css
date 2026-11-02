@@ -1,7 +1,5 @@
 @font-face { font-family: "Antonio"; src: url("fonts/antonio-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-display: swap; }
 @font-face { font-family: "Antonio"; src: url("fonts/antonio-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
-@font-face { font-family: "Big Shoulders Display"; src: url("fonts/big-shoulders-display-latin-800-normal.woff2") format("woff2"); font-weight: 800; font-display: swap; }
-@font-face { font-family: "Big Shoulders Display"; src: url("fonts/big-shoulders-display-latin-900-normal.woff2") format("woff2"); font-weight: 900; font-display: swap; }
 @font-face { font-family: "Rethink Sans"; src: url("fonts/rethink-sans-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "Rethink Sans"; src: url("fonts/rethink-sans-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-display: swap; }
 @font-face { font-family: "Rethink Sans"; src: url("fonts/rethink-sans-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
@@ -29,8 +27,8 @@ body {
 
 .top { padding: 28px 24px 8px; max-width: 1180px; margin: 0 auto; }
 h1 {
-  font-family: "Big Shoulders Display", sans-serif;
-  font-weight: 900;
+  font-family: "Antonio", sans-serif;
+  font-weight: 700;
   font-size: 44px;
   line-height: 1;
   text-transform: uppercase;
@@ -167,3 +165,5 @@ input[type="color"] {
 .grid-guide::before { top: 0; border-bottom: 1px dashed var(--accent); }
 .grid-guide::after { bottom: 0; border-top: 1px dashed var(--accent); }
 .empty { margin: 0; font-size: 13px; color: var(--muted); }
+
+[hidden] { display: none !important; }

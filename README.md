@@ -3,7 +3,7 @@
 Hacedor de portadas de reels (1080×1920): sube una foto, escribe el titular y descarga la portada con el texto detrás de la persona.
 
 - Línea pequeña opcional encima del titular, con su propio tamaño (como en Voltereta).
-- Titular detrás de la persona, en **Antonio** (Bold 700 o SemiBold 600) o **Big Shoulders Display** (Black o ExtraBold), con interletrado -10.
+- Titular detrás de la persona, en **Antonio** (Bold 700 o SemiBold 600), con interletrado -10.
 - Texto extra opcional en **Rethink Sans**, por delante.
 - Color del texto a un clic: verde claro `#6FBF84`, verde oscuro `#142116` o blanco `#FFFFFF`.
 - Encuadre de la foto (zoom y posición) y guía del recorte 3:4 que se ve en la cuadrícula del perfil.
@@ -27,6 +27,6 @@ Alternativa: doble clic en `Abrir portadas.command`, que arranca un servidor loc
 - `index.html`, `style.css`: interfaz.
 - `app.js`: carga de fotos, recorte, controles y descarga.
 - `compose.js`: composición (foto encuadrada, titular, persona recortada, texto extra). Expone `PortadaCompose`.
-- `fonts/`: Antonio, Big Shoulders Display y Rethink Sans (licencia SIL Open Font License, uso comercial libre).
+- `fonts/`: Antonio y Rethink Sans (licencia SIL Open Font License, uso comercial libre).
 
 Al cambiar `style.css`, `compose.js` o `app.js`, sube el número `?v=` en `index.html` para que los navegadores no sigan usando la versión guardada en caché.
