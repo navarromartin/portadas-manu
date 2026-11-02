@@ -11,6 +11,7 @@ const defaults = {
   titleY: 0.3,         // centro del titular, fracción de la altura
   titleSize: 0.3,      // fracción del ancho
   titleLeading: 0.86,  // interlineado del titular
+  firstScale: 1,       // tamaño de la primera línea respecto a las demás (1 = igual)
   titleFont: 'Anek Latin',
   titleWeight: 700,
   titleColor: '#FFFFFF',
@@ -98,28 +99,34 @@ function drawTitle(ctx, width, height, o) {
   if (!text) return;
   if (o.uppercase) text = text.toLocaleUpperCase('es-ES');
   const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
+  // Escala de cada línea: la primera puede ir más pequeña que el resto.
+  const scales = lines.map((_, i) => (i === 0 && lines.length > 1 ? o.firstScale : 1));
   ctx.save();
-  // El tamaño elegido es el máximo: si la línea más larga no cabe, se reduce para que nunca se corte.
+  // El tamaño elegido es el máximo: si alguna línea no cabe, se reduce todo para que nunca se corte.
   let px = Math.round(width * o.titleSize);
-  let spacing = setTitleFont(ctx, o, px);
-  const widest = Math.max(...lines.map((l) => lineWidth(ctx, l, spacing)));
   const maxW = width * 0.92;
-  if (widest > maxW) {
-    px = Math.floor(px * maxW / widest);
-    spacing = setTitleFont(ctx, o, px);
-  }
-  const step = px * o.titleLeading;
+  let worst = 0;
+  lines.forEach((l, i) => {
+    const sp = setTitleFont(ctx, o, px * scales[i]);
+    worst = Math.max(worst, lineWidth(ctx, l, sp) / maxW);
+  });
+  if (worst > 1) px = Math.floor(px / worst);
   ctx.fillStyle = o.titleColor;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
   // Centra el bloque usando la altura de mayúsculas para que no quede descolgado.
-  const capH = ctx.measureText('H').actualBoundingBoxAscent || px * 0.72;
-  const blockH = capH + step * (lines.length - 1);
+  setTitleFont(ctx, o, px);
+  const capRatio = (ctx.measureText('H').actualBoundingBoxAscent || px * 0.72) / px;
+  const sizes = scales.map((s) => px * s);
+  const capH = sizes[0] * capRatio;
+  let blockH = capH;
+  for (let i = 1; i < sizes.length; i++) blockH += sizes[i] * o.titleLeading;
   let base = height * o.titleY - blockH / 2 + capH;
-  for (const l of lines) {
-    drawLine(ctx, l, width / 2, base, spacing);
-    base += step;
-  }
+  lines.forEach((l, i) => {
+    if (i > 0) base += sizes[i] * o.titleLeading;
+    const sp = setTitleFont(ctx, o, sizes[i]);
+    drawLine(ctx, l, width / 2, base, sp);
+  });
   ctx.restore();
 }
 
