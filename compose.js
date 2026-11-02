@@ -124,8 +124,9 @@ function drawTitle(ctx, width, height, o) {
   const capRatio = (ctx.measureText('H').actualBoundingBoxAscent || 72) / 100;
   const step = px * o.titleLeading;
   const bigH = lines.length ? px * capRatio + step * (lines.length - 1) : 0;
-  // Separación entre la línea pequeña y el titular, proporcional a la pequeña.
-  const gap = small && lines.length ? smallPx * 0.45 : 0;
+  // Separación entre la línea pequeña y el titular: también la controla el interlineado
+  // (con 0,86 queda pegada como en Voltereta; más interlineado, más aire).
+  const gap = small && lines.length ? Math.max(smallPx * 0.25, smallPx * 0.45 + px * (o.titleLeading - 0.86)) : 0;
   const blockH = (small ? smallPx * capRatio : 0) + gap + bigH;
   let top = height * o.titleY - blockH / 2;
   if (small) {
