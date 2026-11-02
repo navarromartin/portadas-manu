@@ -23,7 +23,7 @@ const BRAND = [
 
 // Grosores disponibles de cada tipografía del titular.
 const TITLE_WEIGHTS = {
-  'Antonio': [{ name: 'Bold', value: 700 }, { name: 'SemiBold', value: 600 }],
+  'Anek Latin': [{ name: 'Bold', value: 700 }, { name: 'SemiBold', value: 600 }],
   'Big Shoulders Display': [{ name: 'Black', value: 900 }, { name: 'ExtraBold', value: 800 }],
 };
 
@@ -282,8 +282,8 @@ document.addEventListener('paste', (e) => {
   buildSwatches();
   syncControls();
   await Promise.all([
-    document.fonts.load('700 40px "Antonio"'),
-    document.fonts.load('600 40px "Antonio"'),
+    document.fonts.load('700 40px "Anek Latin"'),
+    document.fonts.load('600 40px "Anek Latin"'),
     document.fonts.load('900 40px "Big Shoulders Display"'),
     document.fonts.load('800 40px "Big Shoulders Display"'),
     document.fonts.load('400 20px "Rethink Sans"'),
