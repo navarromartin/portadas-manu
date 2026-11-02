@@ -1,4 +1,4 @@
-// Composición de portadas 9:16: foto encuadrada, titular (Anek Latin o Big Shoulders) detrás
+// Composición de portadas 9:16: foto encuadrada, titular (Antonio o Big Shoulders) detrás
 // de la persona y texto extra (Rethink Sans) por delante.
 // Funciona en navegador (script clásico, expone PortadaCompose) y en Node (require).
 
@@ -13,7 +13,7 @@ const defaults = {
   titleLeading: 0.86,  // interlineado del titular
   small: '',           // línea pequeña opcional encima del titular (como en Voltereta)
   smallSize: 0.08,     // fracción del ancho
-  titleFont: 'Anek Latin',
+  titleFont: 'Antonio',
   titleWeight: 700,
   titleColor: '#FFFFFF',
   uppercase: true,
